@@ -35,6 +35,19 @@ pub fn create(comptime T: type) type {
             self.numberOfElements = 0;
         }
 
+        pub fn add_first(self: *Self, value: T) !void {
+            const node = try self.allocator.create(Node);
+            node.value = value;
+            node.next = self.head;
+            if (self.head) |existingHead| {
+                existingHead.prev = node;
+            } else {
+                self.tail = node;
+            }
+            self.head = node;
+            self.numberOfElements += 1;
+        }
+
         pub fn len(self: Self) usize {
             return self.numberOfElements;
         }
