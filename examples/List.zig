@@ -10,11 +10,13 @@ pub fn create(comptime T: type) type {
 
         allocator: std.mem.Allocator,
         head: ?*Node,
+        numberOfElements: usize,
 
         pub fn init(allocator: std.mem.Allocator) Self {
             return Self{
                 .allocator = allocator,
                 .head = null,
+                .numberOfElements = 0,
             };
         }
 
@@ -26,6 +28,7 @@ pub fn create(comptime T: type) type {
                 current = nextNode;
             }
             self.head = null;
+            self.numberOfElements = 0;
         }
 
         pub fn add(self: *Self, value: T) !void {
@@ -33,6 +36,7 @@ pub fn create(comptime T: type) type {
             node.value = value;
             node.next = self.head;
             self.head = node;
+            self.numberOfElements += 1;
         }
 
         pub fn remove(self: *Self) !T {
@@ -43,21 +47,16 @@ pub fn create(comptime T: type) type {
             self.head = node.next;
             const value = node.value;
             self.allocator.destroy(node);
+            self.numberOfElements -= 1;
             return value;
         }
 
         pub fn len(self: Self) usize {
-            var count: usize = 0;
-            var current = self.head;
-            while (current) |node| {
-                count += 1;
-                current = node.next;
-            }
-            return count;
+            return self.numberOfElements;
         }
 
         pub fn isEmpty(self: Self) bool {
-            return self.head == null;
+            return self.numberOfElements == 0;
         }
     };
 }
