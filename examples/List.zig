@@ -2,11 +2,12 @@ const std = @import("std");
 
 pub fn create(comptime T: type) type {
     return struct {
+        const Self = @This();
+
         const Node = struct {
             value: T,
             next: ?*Node = null,
         };
-        const Self = @This();
 
         allocator: std.mem.Allocator,
         head: ?*Node,
