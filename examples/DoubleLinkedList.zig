@@ -36,15 +36,16 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn add_first(self: *Self, value: T) !void {
-            const node = try self.allocator.create(Node);
-            node.value = value;
-            node.next = self.head;
-            if (self.head) |existingHead| {
-                existingHead.prev = node;
+            const newNode = try self.allocator.create(Node);
+            newNode.value = value;
+            newNode.next = self.head;
+            if (self.head) |firstNode| {
+                firstNode.prev = newNode;
             } else {
-                self.tail = node;
+                self.tail = newNode;
             }
-            self.head = node;
+
+            self.head = newNode;
             self.numberOfElements += 1;
         }
 
