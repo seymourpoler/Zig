@@ -39,6 +39,7 @@ pub fn create(comptime T: type) type {
             const newNode = try self.allocator.create(Node);
             newNode.value = value;
             newNode.next = self.head;
+            newNode.prev = null;
             if (self.head) |firstNode| {
                 firstNode.prev = newNode;
             } else {
@@ -46,6 +47,21 @@ pub fn create(comptime T: type) type {
             }
 
             self.head = newNode;
+            self.numberOfElements += 1;
+        }
+
+        pub fn add_last(self: *Self, value: T) !void {
+            const newNode = try self.allocator.create(Node);
+            newNode.value = value;
+            newNode.prev = self.tail;
+            newNode.next = null;
+            if (self.tail) |lastNode| {
+                lastNode.next = newNode;
+            } else {
+                self.head = newNode;
+            }
+
+            self.tail = newNode;
             self.numberOfElements += 1;
         }
 

@@ -21,3 +21,15 @@ test "When Double Linked List add several elements at first" {
     try testing.expectEqual(@as(bool, false), list.isEmpty());
     try testing.expectEqual(3, list.len());
 }
+
+test "When Double Linked List add several elements at last" {
+    var list = DoubleLinkedList.create(u32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add_last(1);
+    try list.add_last(2);
+    try list.add_last(3);
+
+    try testing.expectEqual(@as(bool, false), list.isEmpty());
+    try testing.expectEqual(3, list.len());
+}
