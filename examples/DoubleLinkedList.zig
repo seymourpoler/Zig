@@ -86,6 +86,14 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
+        pub fn remove_last(self: Self) !T {
+            if (self.tail == null) {
+                return error.isEmpty;
+            }
+
+            return error.Unimplemented;
+        }
+
         pub fn len(self: Self) usize {
             return self.numberOfElements;
         }
