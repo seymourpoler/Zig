@@ -51,12 +51,24 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
-        pub fn remove_first(self: Self) !T {
+        pub fn remove_first(self: *Self) !T {
             if (self.head == null) {
                 return error.isEmpty;
             }
 
-            return error.Unimplemented;
+            const firstNode = self.head.?;
+            const value = firstNode.value;
+
+            if (firstNode.next) |newHead| {
+                newHead.prev = null;
+            } else {
+                self.tail = null;
+            }
+
+            self.head = firstNode.next;
+            self.allocator.destroy(firstNode);
+            self.numberOfElements -= 1;
+            return value;
         }
 
         pub fn add_last(self: *Self, value: T) !void {
