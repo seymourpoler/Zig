@@ -40,6 +40,12 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
+        pub fn addRange(self: *Self, elements: []const T) !void {
+            for (elements) |element| {
+                try self.add(element);
+            }
+        }
+
         pub fn remove(self: *Self) !T {
             if (self.head == null) {
                 return error.isEmpty;
