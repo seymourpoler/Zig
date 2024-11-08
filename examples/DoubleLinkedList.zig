@@ -2,13 +2,14 @@ const std = @import("std");
 
 pub fn create(comptime T: type) type {
     return struct {
+        const Self = @This();
+
         const Node = struct {
             value: T,
             next: ?*Node = null,
             prev: ?*Node = null,
         };
 
-        const Self = @This();
         allocator: std.mem.Allocator,
         head: ?*Node,
         tail: ?*Node,
@@ -48,6 +49,14 @@ pub fn create(comptime T: type) type {
 
             self.head = newNode;
             self.numberOfElements += 1;
+        }
+
+        pub fn remove_first(self: Self) !T {
+            if (self.head == null) {
+                return error.isEmpty;
+            }
+
+            return error.Unimplemented;
         }
 
         pub fn add_last(self: *Self, value: T) !void {
