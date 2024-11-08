@@ -58,3 +58,10 @@ test "List remove several elements from an array" {
     try testing.expectEqual(1, aList.remove());
     try testing.expectError(error.isEmpty, aList.remove());
 }
+
+test "List access and element when there is no elements" {
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try testing.expectError(error.isEmpty, list.get(5));
+}

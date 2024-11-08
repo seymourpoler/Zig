@@ -58,6 +58,14 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
+        pub fn get(self: Self, _: usize) !T {
+            if (self.head == null) {
+                return error.isEmpty;
+            }
+
+            return error.notImplemented;
+        }
+
         pub fn len(self: Self) usize {
             return self.numberOfElements;
         }
