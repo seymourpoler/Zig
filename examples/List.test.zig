@@ -2,11 +2,11 @@ const List = @import("List.zig");
 const testing = @import("std").testing;
 
 test "List is empty" {
-    var aList = List.create(i32).init(testing.allocator);
-    defer aList.deinit();
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
 
-    try testing.expect(aList.isEmpty());
-    try testing.expectEqual(@as(usize, 0), aList.len());
+    try testing.expect(list.isEmpty());
+    try testing.expectEqual(@as(usize, 0), list.len());
 }
 
 test "List add several elements" {
