@@ -65,3 +65,12 @@ test "List access and element when there is no elements" {
 
     try testing.expectError(error.isEmpty, list.get(5));
 }
+
+test "List access and element when the index is bigger to number of elements" {
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add(1);
+
+    try testing.expectError(error.isOutOfBound, list.get(5));
+}

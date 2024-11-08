@@ -58,9 +58,13 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        pub fn get(self: Self, _: usize) !T {
+        pub fn get(self: Self, position: usize) !T {
             if (self.head == null) {
                 return error.isEmpty;
+            }
+
+            if ((position > self.numberOfElements)) {
+                return error.isOutOfBound;
             }
 
             return error.notImplemented;
