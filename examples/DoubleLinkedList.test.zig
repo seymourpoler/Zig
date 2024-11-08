@@ -62,3 +62,18 @@ test "When Double Linked List remove an element at last and it is empty" {
 
     try testing.expectError(error.isEmpty, list.remove_last());
 }
+
+test "When Double Linked List removes several elements at last" {
+    var list = DoubleLinkedList.create(u32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add_last(1);
+    try list.add_last(2);
+    try list.add_last(3);
+
+    try testing.expectEqual(@as(usize, 3), list.len());
+    try testing.expectEqual(@as(u32, 3), list.remove_last());
+    try testing.expectEqual(@as(u32, 2), list.remove_last());
+    try testing.expectEqual(@as(u32, 1), list.remove_last());
+    try testing.expectEqual(@as(u32, 0), list.len());
+}

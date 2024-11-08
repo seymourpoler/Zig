@@ -41,8 +41,8 @@ pub fn create(comptime T: type) type {
             newNode.value = value;
             newNode.next = self.head;
             newNode.prev = null;
-            if (self.head) |firstNode| {
-                firstNode.prev = newNode;
+            if (self.head) |newHead| {
+                newHead.prev = newNode;
             } else {
                 self.tail = newNode;
             }
@@ -76,8 +76,8 @@ pub fn create(comptime T: type) type {
             newNode.value = value;
             newNode.prev = self.tail;
             newNode.next = null;
-            if (self.tail) |lastNode| {
-                lastNode.next = newNode;
+            if (self.tail) |newTail| {
+                newTail.next = newNode;
             } else {
                 self.head = newNode;
             }
@@ -86,12 +86,24 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
-        pub fn remove_last(self: Self) !T {
+        pub fn remove_last(self: *Self) !T {
             if (self.tail == null) {
                 return error.isEmpty;
             }
 
-            return error.Unimplemented;
+            const lastNode = self.tail.?;
+            const value = lastNode.value;
+
+            if (lastNode.prev) |newTail| {
+                newTail.next = null;
+            } else {
+                self.head = null;
+            }
+
+            self.tail = lastNode.prev;
+            self.allocator.destroy(lastNode);
+            self.numberOfElements -= 1;
+            return value;
         }
 
         pub fn len(self: Self) usize {
