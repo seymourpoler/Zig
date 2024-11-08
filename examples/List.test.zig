@@ -6,6 +6,7 @@ test "List is empty" {
     defer aList.deinit();
 
     try testing.expect(aList.isEmpty());
+    try testing.expectEqual(@as(usize, 0), aList.len());
 }
 
 test "List add several elements" {
