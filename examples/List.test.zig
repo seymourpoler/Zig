@@ -112,7 +112,7 @@ test "List remove an element at position bigger than the number of elements" {
     try testing.expectError(error.isOutOfBound, list.removeAt(5));
 }
 
-test "List remove an element at certain position" {
+test "List remove an element at some position" {
     var list = List.create(i32).init(testing.allocator);
     defer list.deinit();
 
@@ -120,8 +120,11 @@ test "List remove an element at certain position" {
     try list.add(2);
     try list.add(3);
     try list.add(4);
+    try list.add(5);
 
-    try testing.expectEqual(@as(i32, 2), list.removeAt(2));
+    try testing.expectEqual(@as(i32, 3), list.removeAt(2));
+    try testing.expectEqual(@as(i32, 4), list.removeAt(1));
+    try testing.expectEqual(@as(i32, 3), list.len());
 }
 
 test "List convert all values into an array" {

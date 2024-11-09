@@ -47,7 +47,7 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn remove(self: *Self) !T {
-            if (self.head == null) {
+            if (self.isEmpty()) {
                 return error.isEmpty;
             }
             const node = self.head.?;
