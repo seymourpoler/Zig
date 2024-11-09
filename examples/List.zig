@@ -110,12 +110,12 @@ pub fn create(comptime T: type) type {
             return result;
         }
 
-        pub fn len(self: Self) usize {
+        pub fn size(self: Self) usize {
             return self.numberOfElements;
         }
 
         pub fn isEmpty(self: Self) bool {
-            return self.numberOfElements == 0;
+            return self.size() == 0;
         }
     };
 }

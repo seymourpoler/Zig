@@ -6,7 +6,7 @@ test "List is empty" {
     defer list.deinit();
 
     try testing.expect(list.isEmpty());
-    try testing.expectEqual(@as(usize, 0), list.len());
+    try testing.expectEqual(@as(usize, 0), list.size());
 }
 
 test "List add several elements" {
@@ -18,7 +18,7 @@ test "List add several elements" {
     try aList.add(3);
 
     try testing.expectEqual(@as(bool, false), aList.isEmpty());
-    try testing.expectEqual(3, aList.len());
+    try testing.expectEqual(3, aList.size());
 }
 
 test "List add and array of elements" {
@@ -29,7 +29,7 @@ test "List add and array of elements" {
     try aList.addRange(elements);
 
     try testing.expectEqual(@as(bool, false), aList.isEmpty());
-    try testing.expectEqual(3, aList.len());
+    try testing.expectEqual(3, aList.size());
 }
 
 test "List remove several elements" {
@@ -124,7 +124,7 @@ test "List remove an element at some position" {
 
     try testing.expectEqual(@as(i32, 3), list.removeAt(2));
     try testing.expectEqual(@as(i32, 4), list.removeAt(1));
-    try testing.expectEqual(@as(i32, 3), list.len());
+    try testing.expectEqual(@as(i32, 3), list.size());
 }
 
 test "List convert all values into an array" {
