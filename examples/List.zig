@@ -69,7 +69,7 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn getAt(self: Self, position: usize) !T {
-            if (self.head == null) {
+            if (self.isEmpty()) {
                 return error.isEmpty;
             }
 
