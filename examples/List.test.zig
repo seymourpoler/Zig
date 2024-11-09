@@ -103,11 +103,23 @@ test "List remove element at any position when is empty" {
     try testing.expectError(error.isEmpty, list.removeAt(5));
 }
 
-test "List remove an element at position  bigger than the number of elements" {
+test "List remove an element at position bigger than the number of elements" {
     var list = List.create(i32).init(testing.allocator);
     defer list.deinit();
 
     try list.add(1);
 
     try testing.expectError(error.isOutOfBound, list.removeAt(5));
+}
+
+test "List remove an element at position" {
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add(1);
+    try list.add(2);
+    try list.add(3);
+    try list.add(4);
+
+    try testing.expectError(@as(usize, 2), list.removeAt(2));
 }
