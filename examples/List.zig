@@ -58,6 +58,13 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
+        pub fn removeAt(self: *Self, _: usize) !T {
+            if (self.isEmpty()) {
+                return error.isEmpty;
+            }
+            return error.isNotImplemented;
+        }
+
         pub fn get(self: Self, position: usize) !T {
             if (self.head == null) {
                 return error.isEmpty;

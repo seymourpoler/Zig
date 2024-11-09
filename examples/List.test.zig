@@ -95,3 +95,10 @@ test "List access with several elements" {
 
     try testing.expectEqual(@as(i32, 9), list.get(2));
 }
+
+test "List remove element at any position when is empty" {
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try testing.expectError(error.isEmpty, list.removeAt(5));
+}
