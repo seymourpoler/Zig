@@ -75,20 +75,11 @@ test "List access an element when the index is bigger than the number of element
     try testing.expectError(error.isOutOfBound, list.get(5));
 }
 
-test "List access an element when the index is lower than the number of elements" {
+test "List access with one element" {
     var list = List.create(i32).init(testing.allocator);
     defer list.deinit();
 
     try list.add(8);
 
-    try testing.expectError(error.isOutOfBound, list.get(-2));
-}
-
-test "List access an element" {
-    var list = List.create(i32).init(testing.allocator);
-    defer list.deinit();
-
-    try list.add(8);
-
-    try testing.expectError(error.isOutOfBound, list.get(-2));
+    try testing.expectEqual(@as(i32, 8), list.get(0));
 }

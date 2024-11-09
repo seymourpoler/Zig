@@ -58,16 +58,20 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        pub fn get(self: Self, position: i32) !T {
+        pub fn get(self: Self, position: usize) !T {
             if (self.head == null) {
                 return error.isEmpty;
             }
 
-            if ((position > self.numberOfElements) or (position < 0)) {
+            if ((position > self.numberOfElements)) {
                 return error.isOutOfBound;
             }
 
-            return error.notImplemented;
+            var current = self.head.?;
+            for (0..position) |_| {
+                current = current.next.?;
+            }
+            return current.value;
         }
 
         pub fn len(self: Self) usize {
