@@ -106,7 +106,7 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        pub fn len(self: Self) usize {
+        pub fn size(self: Self) usize {
             return self.numberOfElements;
         }
 
