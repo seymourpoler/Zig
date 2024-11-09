@@ -10,6 +10,23 @@ test "When List is created, it is empty and its length is zero" {
     try testing.expect(list.isEmpty());
 }
 
+test "When List adds an element, position is out of bound" {
+    var list = List.create(u32).init(testing.allocator);
+    defer list.deinit();
+    try list.add_range_last(&[_]u32{ 2, 3 });
+
+    try testing.expectError(error.isOutOfBound, list.getAt(5));
+}
+
+test "When List gets an element it is empty" {
+    var list = List.create(u32).init(testing.allocator);
+    defer list.deinit();
+    try list.add_first(1);
+    try list.add_range_last(&[_]u32{ 2, 3 });
+
+    try testing.expectEqual(@as(u32, 2), list.getAt(1));
+}
+
 test "When List adds several elements at first" {
     var list = List.create(u32).init(testing.allocator);
     defer list.deinit();

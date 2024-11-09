@@ -36,6 +36,22 @@ pub fn create(comptime T: type) type {
             self.numberOfElements = 0;
         }
 
+        pub fn getAt(self: Self, position: usize) !T {
+            if (self.isEmpty()) {
+                return error.isEmpty;
+            }
+
+            if (position >= self.numberOfElements) {
+                return error.isOutOfBound;
+            }
+
+            var currentElement = self.head.?;
+            for (0..position) |_| {
+                currentElement = currentElement.next.?;
+            }
+            return currentElement.value;
+        }
+
         pub fn add_first(self: *Self, value: T) !void {
             const newNode = try self.allocator.create(Node);
             newNode.value = value;
