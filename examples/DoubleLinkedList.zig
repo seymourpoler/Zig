@@ -57,6 +57,12 @@ pub fn create(comptime T: type) type {
             }
         }
 
+        pub fn add_range_last(self: *Self, values: []const T) !void {
+            for (values) |value| {
+                try self.add_last(value);
+            }
+        }
+
         pub fn remove_first(self: *Self) !T {
             if (self.head == null) {
                 return error.isEmpty;
