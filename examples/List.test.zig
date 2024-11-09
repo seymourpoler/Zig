@@ -59,18 +59,36 @@ test "List remove several elements from an array" {
     try testing.expectError(error.isEmpty, aList.remove());
 }
 
-test "List access and element when there is no elements" {
+test "List access an element when there is no elements" {
     var list = List.create(i32).init(testing.allocator);
     defer list.deinit();
 
     try testing.expectError(error.isEmpty, list.get(5));
 }
 
-test "List access and element when the index is bigger to number of elements" {
+test "List access an element when the index is bigger than the number of elements" {
     var list = List.create(i32).init(testing.allocator);
     defer list.deinit();
 
     try list.add(1);
 
     try testing.expectError(error.isOutOfBound, list.get(5));
+}
+
+test "List access an element when the index is lower than the number of elements" {
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add(8);
+
+    try testing.expectError(error.isOutOfBound, list.get(-2));
+}
+
+test "List access an element" {
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add(8);
+
+    try testing.expectError(error.isOutOfBound, list.get(-2));
 }
