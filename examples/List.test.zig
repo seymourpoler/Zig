@@ -123,3 +123,22 @@ test "List remove an element at certain position" {
 
     try testing.expectEqual(@as(i32, 2), list.removeAt(2));
 }
+
+test "List convert all values into an array" {
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add(1);
+    try list.add(2);
+    try list.add(3);
+    try list.add(4);
+
+    const array = try list.toArray();
+    defer testing.allocator.free(array);
+
+    try testing.expectEqual(4, array.len);
+    try testing.expectEqual(@as(i32, 4), array[0]);
+    try testing.expectEqual(@as(i32, 3), array[1]);
+    try testing.expectEqual(@as(i32, 2), array[2]);
+    try testing.expectEqual(@as(i32, 1), array[3]);
+}

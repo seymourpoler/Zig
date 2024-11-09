@@ -99,6 +99,16 @@ pub fn create(comptime T: type) type {
             return current.value;
         }
 
+        pub fn toArray(self: Self) ![]T {
+            const result = try self.allocator.alloc(T, self.numberOfElements);
+            var current = self.head;
+            for (0..self.numberOfElements) |currentPosition| {
+                result[currentPosition] = current.?.value;
+                current = current.?.next;
+            }
+            return result;
+        }
+
         pub fn len(self: Self) usize {
             return self.numberOfElements;
         }
