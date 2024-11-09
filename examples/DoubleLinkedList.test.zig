@@ -131,3 +131,24 @@ test "When List removes an element at a given position" {
     try testing.expectEqual(@as(u32, 3), list.remove_at(1));
     try testing.expectEqual(@as(usize, 4), list.size());
 }
+
+test "When List returns an elements array" {
+    var list = List.create(u32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add_first(1);
+    try list.add_range_first(&[_]u32{ 2, 3 });
+    try list.add_last(4);
+    try list.add_range_last(&[_]u32{ 5, 6 });
+
+    const elements = try list.to_array();
+    defer testing.allocator.free(elements);
+
+    try testing.expectEqual(6, elements.len);
+    try testing.expectEqual(@as(u32, 3), elements[0]);
+    try testing.expectEqual(@as(u32, 2), elements[1]);
+    try testing.expectEqual(@as(u32, 1), elements[2]);
+    try testing.expectEqual(@as(u32, 4), elements[3]);
+    try testing.expectEqual(@as(u32, 5), elements[4]);
+    try testing.expectEqual(@as(u32, 6), elements[5]);
+}
