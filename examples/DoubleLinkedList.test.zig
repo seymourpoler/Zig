@@ -110,3 +110,12 @@ test "When List removes an element and it is empty" {
 
     try testing.expectError(error.isEmpty, list.remove_at(3));
 }
+
+test "When List removes an element and the position is out of bound" {
+    var list = List.create(u32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add_last(1);
+
+    try testing.expectError(error.isOutOfBound, list.remove_at(3));
+}

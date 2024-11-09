@@ -118,9 +118,13 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        pub fn remove_at(self: *Self, _: usize) !T {
+        pub fn remove_at(self: *Self, position: usize) !T {
             if (self.isEmpty()) {
                 return error.isEmpty;
+            }
+
+            if (position >= self.numberOfElements) {
+                return error.isOutOfBound;
             }
 
             return error.Unimplemented;
