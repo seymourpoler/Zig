@@ -13,7 +13,6 @@ test "When List is created, it is empty and its length is zero" {
 test "When List add several elements at first" {
     var list = List.create(u32).init(testing.allocator);
     defer list.deinit();
-
     try list.add_first(1);
     try list.add_first(2);
     try list.add_first(3);
@@ -25,13 +24,26 @@ test "When List add several elements at first" {
 test "When List add several elements at last" {
     var list = List.create(u32).init(testing.allocator);
     defer list.deinit();
-
     try list.add_last(1);
     try list.add_last(2);
     try list.add_last(3);
 
     try testing.expectEqual(@as(bool, false), list.isEmpty());
     try testing.expectEqual(@as(usize, 3), list.size());
+}
+
+test "Whe List add an array of elements at first" {
+    var list = List.create(u32).init(testing.allocator);
+    defer list.deinit();
+    try list.add_first(1);
+    try list.add_first(2);
+    try list.add_first(3);
+    const elements = &[_]u32{ 1, 2, 3 };
+
+    try list.add_range_first(elements);
+
+    try testing.expectEqual(@as(bool, false), list.isEmpty());
+    try testing.expectEqual(@as(usize, 6), list.size());
 }
 
 test "When List remove an element at first and it is empty" {

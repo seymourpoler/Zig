@@ -51,6 +51,12 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
+        pub fn add_range_first(self: *Self, values: []const T) !void {
+            for (values) |value| {
+                try self.add_first(value);
+            }
+        }
+
         pub fn remove_first(self: *Self) !T {
             if (self.head == null) {
                 return error.isEmpty;
