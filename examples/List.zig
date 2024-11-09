@@ -68,7 +68,7 @@ pub fn create(comptime T: type) type {
             return error.isNotImplemented;
         }
 
-        pub fn get(self: Self, position: usize) !T {
+        pub fn getAt(self: Self, position: usize) !T {
             if (self.head == null) {
                 return error.isEmpty;
             }

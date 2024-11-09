@@ -63,7 +63,7 @@ test "List access an element when there is no elements" {
     var list = List.create(i32).init(testing.allocator);
     defer list.deinit();
 
-    try testing.expectError(error.isEmpty, list.get(5));
+    try testing.expectError(error.isEmpty, list.getAt(5));
 }
 
 test "List access an element when the index is bigger than the number of elements" {
@@ -72,7 +72,7 @@ test "List access an element when the index is bigger than the number of element
 
     try list.add(1);
 
-    try testing.expectError(error.isOutOfBound, list.get(5));
+    try testing.expectError(error.isOutOfBound, list.getAt(5));
 }
 
 test "List access with one element" {
@@ -81,7 +81,7 @@ test "List access with one element" {
 
     try list.add(8);
 
-    try testing.expectEqual(@as(i32, 8), list.get(0));
+    try testing.expectEqual(@as(i32, 8), list.getAt(0));
 }
 
 test "List access with several elements" {
@@ -93,7 +93,7 @@ test "List access with several elements" {
     try list.add(10);
     try list.add(11);
 
-    try testing.expectEqual(@as(i32, 9), list.get(2));
+    try testing.expectEqual(@as(i32, 9), list.getAt(2));
 }
 
 test "List remove element at any position when is empty" {
