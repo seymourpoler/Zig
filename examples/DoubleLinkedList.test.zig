@@ -103,3 +103,10 @@ test "When List removes several elements at last" {
     try testing.expectEqual(@as(u32, 1), list.remove_last());
     try testing.expectEqual(@as(u32, 0), list.size());
 }
+
+test "When List removes an element and it is empty" {
+    var list = List.create(u32).init(testing.allocator);
+    defer list.deinit();
+
+    try testing.expectError(error.isEmpty, list.remove_at(3));
+}
