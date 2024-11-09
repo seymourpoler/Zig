@@ -106,6 +106,7 @@ pub fn create(comptime T: type) type {
                 result[currentPosition] = current.?.value;
                 current = current.?.next;
             }
+
             return result;
         }
 
