@@ -62,10 +62,25 @@ pub fn create(comptime T: type) type {
             if (self.isEmpty()) {
                 return error.isEmpty;
             }
-            if ((position > self.numberOfElements)) {
+            if (position >= self.numberOfElements) {
                 return error.isOutOfBound;
             }
-            return error.isNotImplemented;
+
+            var current = self.head.?;
+            var previous: ?*Node = null;
+            for (0..position) |_| {
+                previous = current;
+                current = current.next.?;
+            }
+            if (previous == null) {
+                self.head = current.next;
+            } else {
+                previous.?.next = current.next;
+            }
+            const value = current.value;
+            self.allocator.destroy(current);
+            self.numberOfElements -= 1;
+            return value;
         }
 
         pub fn getAt(self: Self, position: usize) !T {
