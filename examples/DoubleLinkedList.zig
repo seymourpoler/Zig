@@ -132,22 +132,29 @@ pub fn create(comptime T: type) type {
                 current = current.next.?;
             }
 
-            const value = current.value;
-            if (current.prev) |previous| {
-                previous.next = current.next;
-            } else {
-                self.head = current.next;
-            }
+            self.updateBeforeElement(current);
+            self.updateNextElement(current);
 
+            const value = current.value;
+            self.allocator.destroy(current);
+            self.numberOfElements -= 1;
+            return value;
+        }
+
+        fn updateNextElement(self: *Self, current: *Node) void {
             if (current.next) |next| {
                 next.prev = current.prev;
             } else {
                 self.tail = current.prev;
             }
+        }
 
-            self.allocator.destroy(current);
-            self.numberOfElements -= 1;
-            return value;
+        fn updateBeforeElement(self: *Self, current: *Node) void {
+            if (current.prev) |previous| {
+                previous.next = current.next;
+            } else {
+                self.head = current.next;
+            }
         }
 
         pub fn size(self: Self) usize {
