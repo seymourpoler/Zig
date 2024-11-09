@@ -127,7 +127,27 @@ pub fn create(comptime T: type) type {
                 return error.isOutOfBound;
             }
 
-            return error.Unimplemented;
+            var current = self.head.?;
+            for (0..position) |_| {
+                current = current.next.?;
+            }
+
+            const value = current.value;
+            if (current.prev) |previous| {
+                previous.next = current.next;
+            } else {
+                self.head = current.next;
+            }
+
+            if (current.next) |next| {
+                next.prev = current.prev;
+            } else {
+                self.tail = current.prev;
+            }
+
+            self.allocator.destroy(current);
+            self.numberOfElements -= 1;
+            return value;
         }
 
         pub fn size(self: Self) usize {

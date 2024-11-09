@@ -119,3 +119,15 @@ test "When List removes an element and the position is out of bound" {
 
     try testing.expectError(error.isOutOfBound, list.remove_at(3));
 }
+
+test "When List removes an element at a given position" {
+    var list = List.create(u32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add_first(1);
+    try list.add_range_first(&[_]u32{ 2, 3, 4 });
+    try list.add_last(5);
+
+    try testing.expectEqual(@as(u32, 3), list.remove_at(1));
+    try testing.expectEqual(@as(usize, 4), list.size());
+}
