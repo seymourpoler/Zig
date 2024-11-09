@@ -83,3 +83,15 @@ test "List access with one element" {
 
     try testing.expectEqual(@as(i32, 8), list.get(0));
 }
+
+test "List access with several elements" {
+    var list = List.create(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try list.add(8);
+    try list.add(9);
+    try list.add(10);
+    try list.add(11);
+
+    try testing.expectEqual(@as(i32, 9), list.get(2));
+}
