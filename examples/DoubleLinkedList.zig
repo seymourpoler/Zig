@@ -127,33 +127,37 @@ pub fn create(comptime T: type) type {
                 return error.isOutOfBound;
             }
 
-            var current = self.head.?;
-            for (0..position) |_| {
-                current = current.next.?;
-            }
+            const currentElement = self.findElementAt(position);
+            self.updateElementBefore(currentElement);
+            self.updateElementNext(currentElement);
 
-            self.updateBeforeElement(current);
-            self.updateNextElement(current);
-
-            const value = current.value;
-            self.allocator.destroy(current);
+            const value = currentElement.value;
+            self.allocator.destroy(currentElement);
             self.numberOfElements -= 1;
             return value;
         }
 
-        fn updateNextElement(self: *Self, current: *Node) void {
-            if (current.next) |next| {
-                next.prev = current.prev;
+        fn findElementAt(self: *Self, position: usize) *Node {
+            var currentElement = self.head.?;
+            for (0..position) |_| {
+                currentElement = currentElement.next.?;
+            }
+            return currentElement;
+        }
+
+        fn updateElementNext(self: *Self, currentElement: *Node) void {
+            if (currentElement.next) |next| {
+                next.prev = currentElement.prev;
             } else {
-                self.tail = current.prev;
+                self.tail = currentElement.prev;
             }
         }
 
-        fn updateBeforeElement(self: *Self, current: *Node) void {
-            if (current.prev) |previous| {
-                previous.next = current.next;
+        fn updateElementBefore(self: *Self, currentElement: *Node) void {
+            if (currentElement.prev) |previous| {
+                previous.next = currentElement.next;
             } else {
-                self.head = current.next;
+                self.head = currentElement.next;
             }
         }
 
