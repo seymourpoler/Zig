@@ -64,7 +64,7 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn remove_first(self: *Self) !T {
-            if (self.head == null) {
+            if (self.isEmpty()) {
                 return error.isEmpty;
             }
 
@@ -99,7 +99,7 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn remove_last(self: *Self) !T {
-            if (self.tail == null) {
+            if (self.isEmpty()) {
                 return error.isEmpty;
             }
 
