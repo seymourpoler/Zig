@@ -1,7 +1,5 @@
 const std = @import("std");
 
-pub const List = struct {};
-
 pub fn create(comptime T: type) type {
     return struct {
         const Node = struct {
