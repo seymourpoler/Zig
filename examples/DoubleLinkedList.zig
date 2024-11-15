@@ -2,8 +2,6 @@ const std = @import("std");
 
 pub fn create(comptime T: type) type {
     return struct {
-        const Self = @This();
-
         const Node = struct {
             value: T,
             next: ?*Node = null,
@@ -15,8 +13,8 @@ pub fn create(comptime T: type) type {
         tail: ?*Node,
         numberOfElements: usize,
 
-        pub fn init(allocator: std.mem.Allocator) Self {
-            return Self{
+        pub fn init(allocator: std.mem.Allocator) @This() {
+            return @This(){
                 .allocator = allocator,
                 .head = null,
                 .tail = null,
@@ -24,7 +22,7 @@ pub fn create(comptime T: type) type {
             };
         }
 
-        pub fn deinit(self: *Self) void {
+        pub fn deinit(self: *@This()) void {
             var current = self.head;
             while (current) |node| {
                 const nextNode = node.next;
@@ -36,7 +34,7 @@ pub fn create(comptime T: type) type {
             self.numberOfElements = 0;
         }
 
-        pub fn getAt(self: Self, position: usize) !T {
+        pub fn getAt(self: @This(), position: usize) !T {
             if (self.isEmpty()) {
                 return error.isEmpty;
             }
@@ -52,7 +50,7 @@ pub fn create(comptime T: type) type {
             return currentElement.value;
         }
 
-        pub fn add_first(self: *Self, value: T) !void {
+        pub fn add_first(self: *@This(), value: T) !void {
             const newNode = try self.allocator.create(Node);
             newNode.value = value;
             newNode.next = self.head;
@@ -67,19 +65,19 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
-        pub fn add_range_first(self: *Self, values: []const T) !void {
+        pub fn add_range_first(self: *@This(), values: []const T) !void {
             for (values) |value| {
                 try self.add_first(value);
             }
         }
 
-        pub fn add_range_last(self: *Self, values: []const T) !void {
+        pub fn add_range_last(self: *@This(), values: []const T) !void {
             for (values) |value| {
                 try self.add_last(value);
             }
         }
 
-        pub fn remove_first(self: *Self) !T {
+        pub fn remove_first(self: *@This()) !T {
             if (self.isEmpty()) {
                 return error.isEmpty;
             }
@@ -99,7 +97,7 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        pub fn add_last(self: *Self, value: T) !void {
+        pub fn add_last(self: *@This(), value: T) !void {
             const newNode = try self.allocator.create(Node);
             newNode.value = value;
             newNode.prev = self.tail;
@@ -114,7 +112,7 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
-        pub fn remove_last(self: *Self) !T {
+        pub fn remove_last(self: *@This()) !T {
             if (self.isEmpty()) {
                 return error.isEmpty;
             }
@@ -134,7 +132,7 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        pub fn remove_at(self: *Self, position: usize) !T {
+        pub fn remove_at(self: *@This(), position: usize) !T {
             if (self.isEmpty()) {
                 return error.isEmpty;
             }
@@ -153,7 +151,7 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        fn findElementAt(self: *Self, position: usize) *Node {
+        fn findElementAt(self: *@This(), position: usize) *Node {
             var currentElement = self.head.?;
             for (0..position) |_| {
                 currentElement = currentElement.next.?;
@@ -161,7 +159,7 @@ pub fn create(comptime T: type) type {
             return currentElement;
         }
 
-        fn updateElementNext(self: *Self, currentElement: *Node) void {
+        fn updateElementNext(self: *@This(), currentElement: *Node) void {
             if (currentElement.next) |next| {
                 next.prev = currentElement.prev;
             } else {
@@ -169,7 +167,7 @@ pub fn create(comptime T: type) type {
             }
         }
 
-        fn updateElementBefore(self: *Self, currentElement: *Node) void {
+        fn updateElementBefore(self: *@This(), currentElement: *Node) void {
             if (currentElement.prev) |previous| {
                 previous.next = currentElement.next;
             } else {
@@ -177,7 +175,7 @@ pub fn create(comptime T: type) type {
             }
         }
 
-        pub fn to_array(self: *Self) ![]T {
+        pub fn to_array(self: *@This()) ![]T {
             const result = try self.allocator.alloc(T, self.numberOfElements);
             var current = self.head;
             for (0..self.numberOfElements) |currentPosition| {
@@ -188,11 +186,11 @@ pub fn create(comptime T: type) type {
             return result;
         }
 
-        pub fn size(self: Self) usize {
+        pub fn size(self: @This()) usize {
             return self.numberOfElements;
         }
 
-        pub fn isEmpty(self: Self) bool {
+        pub fn isEmpty(self: @This()) bool {
             return self.numberOfElements == 0;
         }
     };
