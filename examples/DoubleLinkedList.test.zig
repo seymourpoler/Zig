@@ -162,8 +162,8 @@ test "When List returns an elements array" {
     defer testing.allocator.free(elements);
 
     try testing.expectEqual(6, elements.len);
-    try testing.expectEqual(@as(u32, 3), elements[0]);
-    try testing.expectEqual(@as(u32, 2), elements[1]);
+    try testing.expectEqual(@as(u32, 2), elements[0]);
+    try testing.expectEqual(@as(u32, 3), elements[1]);
     try testing.expectEqual(@as(u32, 1), elements[2]);
     try testing.expectEqual(@as(u32, 4), elements[3]);
     try testing.expectEqual(@as(u32, 5), elements[4]);

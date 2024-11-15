@@ -66,9 +66,15 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn add_range_first(self: *@This(), values: []const T) !void {
-            for (values) |value| {
-                try self.add_first(value);
+            var position = values.len;
+            while (position > 0) {
+                position -= 1;
+                try self.add_first(values[position]);
             }
+
+            //for (values) |value| {
+            //    try self.add_first(value);
+            //}
         }
 
         pub fn add_range_last(self: *@This(), values: []const T) !void {
