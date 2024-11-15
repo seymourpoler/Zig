@@ -70,7 +70,7 @@ pub fn create(comptime T: type) type {
             return error.notImplemented;
         }
 
-        pub fn len(self: @This()) usize {
+        pub fn size(self: @This()) usize {
             return self.numberOfElements;
         }
 
