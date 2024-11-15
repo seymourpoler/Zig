@@ -36,6 +36,22 @@ pub fn create(comptime T: type) type {
             self.numberOfElements = 0;
         }
 
+        pub fn getAt(self: Self, position: usize) !T {
+            if (self.isEmpty()) {
+                return error.isEmpty;
+            }
+
+            if (position >= self.numberOfElements) {
+                return error.isOutOfBound;
+            }
+
+            var currentElement = self.head.?;
+            for (0..position) |_| {
+                currentElement = currentElement.next.?;
+            }
+            return currentElement.value;
+        }
+
         pub fn add_first(self: *Self, value: T) !void {
             const newNode = try self.allocator.create(Node);
             newNode.value = value;
@@ -51,8 +67,20 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
+        pub fn add_range_first(self: *Self, values: []const T) !void {
+            for (values) |value| {
+                try self.add_first(value);
+            }
+        }
+
+        pub fn add_range_last(self: *Self, values: []const T) !void {
+            for (values) |value| {
+                try self.add_last(value);
+            }
+        }
+
         pub fn remove_first(self: *Self) !T {
-            if (self.head == null) {
+            if (self.isEmpty()) {
                 return error.isEmpty;
             }
 
@@ -87,7 +115,7 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn remove_last(self: *Self) !T {
-            if (self.tail == null) {
+            if (self.isEmpty()) {
                 return error.isEmpty;
             }
 
@@ -106,7 +134,61 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        pub fn len(self: Self) usize {
+        pub fn remove_at(self: *Self, position: usize) !T {
+            if (self.isEmpty()) {
+                return error.isEmpty;
+            }
+
+            if (position >= self.numberOfElements) {
+                return error.isOutOfBound;
+            }
+
+            const currentElement = self.findElementAt(position);
+            self.updateElementBefore(currentElement);
+            self.updateElementNext(currentElement);
+
+            const value = currentElement.value;
+            self.allocator.destroy(currentElement);
+            self.numberOfElements -= 1;
+            return value;
+        }
+
+        fn findElementAt(self: *Self, position: usize) *Node {
+            var currentElement = self.head.?;
+            for (0..position) |_| {
+                currentElement = currentElement.next.?;
+            }
+            return currentElement;
+        }
+
+        fn updateElementNext(self: *Self, currentElement: *Node) void {
+            if (currentElement.next) |next| {
+                next.prev = currentElement.prev;
+            } else {
+                self.tail = currentElement.prev;
+            }
+        }
+
+        fn updateElementBefore(self: *Self, currentElement: *Node) void {
+            if (currentElement.prev) |previous| {
+                previous.next = currentElement.next;
+            } else {
+                self.head = currentElement.next;
+            }
+        }
+
+        pub fn to_array(self: *Self) ![]T {
+            const result = try self.allocator.alloc(T, self.numberOfElements);
+            var current = self.head;
+            for (0..self.numberOfElements) |currentPosition| {
+                result[currentPosition] = current.?.value;
+                current = current.?.next;
+            }
+
+            return result;
+        }
+
+        pub fn size(self: Self) usize {
             return self.numberOfElements;
         }
 

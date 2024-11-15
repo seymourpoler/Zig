@@ -47,7 +47,7 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn remove(self: *@This()) !T {
-            if (self.head == null) {
+            if (self.isEmpty()) {
                 return error.isEmpty;
             }
             const node = self.head.?;
@@ -67,7 +67,22 @@ pub fn create(comptime T: type) type {
                 return error.isOutOfBound;
             }
 
-            return error.notImplemented;
+            var current = self.head.?;
+            for (0..position) |_| {
+                current = current.next.?;
+            }
+            return current.value;
+        }
+
+        pub fn toArray(self: @This()) ![]T {
+            const result = try self.allocator.alloc(T, self.numberOfElements);
+            var current = self.head;
+            for (0..self.numberOfElements) |currentPosition| {
+                result[currentPosition] = current.?.value;
+                current = current.?.next;
+            }
+
+            return result;
         }
 
         pub fn size(self: @This()) usize {
