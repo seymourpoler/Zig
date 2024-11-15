@@ -1,9 +1,9 @@
 const std = @import("std");
 
+pub const List = struct {};
+
 pub fn create(comptime T: type) type {
     return struct {
-        const Self = @This();
-
         const Node = struct {
             value: T,
             next: ?*Node = null,
@@ -13,15 +13,15 @@ pub fn create(comptime T: type) type {
         head: ?*Node,
         numberOfElements: usize,
 
-        pub fn init(allocator: std.mem.Allocator) Self {
-            return Self{
+        pub fn init(allocator: std.mem.Allocator) @This() {
+            return @This(){
                 .allocator = allocator,
                 .head = null,
                 .numberOfElements = 0,
             };
         }
 
-        pub fn deinit(self: *Self) void {
+        pub fn deinit(self: *@This()) void {
             var current = self.head;
             while (current) |node| {
                 const nextNode = node.next;
@@ -32,7 +32,7 @@ pub fn create(comptime T: type) type {
             self.numberOfElements = 0;
         }
 
-        pub fn add(self: *Self, value: T) !void {
+        pub fn add(self: *@This(), value: T) !void {
             const node = try self.allocator.create(Node);
             node.value = value;
             node.next = self.head;
@@ -40,13 +40,13 @@ pub fn create(comptime T: type) type {
             self.numberOfElements += 1;
         }
 
-        pub fn addRange(self: *Self, elements: []const T) !void {
+        pub fn addRange(self: *@This(), elements: []const T) !void {
             for (elements) |element| {
                 try self.add(element);
             }
         }
 
-        pub fn remove(self: *Self) !T {
+        pub fn remove(self: *@This()) !T {
             if (self.head == null) {
                 return error.isEmpty;
             }
@@ -58,7 +58,7 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
-        pub fn get(self: Self, position: usize) !T {
+        pub fn get(self: @This(), position: usize) !T {
             if (self.head == null) {
                 return error.isEmpty;
             }
@@ -70,11 +70,11 @@ pub fn create(comptime T: type) type {
             return error.notImplemented;
         }
 
-        pub fn len(self: Self) usize {
+        pub fn len(self: @This()) usize {
             return self.numberOfElements;
         }
 
-        pub fn isEmpty(self: Self) bool {
+        pub fn isEmpty(self: @This()) bool {
             return self.numberOfElements == 0;
         }
     };
