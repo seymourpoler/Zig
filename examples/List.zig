@@ -58,8 +58,49 @@ pub fn create(comptime T: type) type {
             return value;
         }
 
+        pub fn removeAt(self: *@This(), position: usize) !T {
+            if (self.isEmpty()) {
+                return error.isEmpty;
+            }
+            if (position >= self.numberOfElements) {
+                return error.isOutOfBound;
+            }
+
+            var current = self.head.?;
+            var previous: ?*Node = null;
+            for (0..position) |_| {
+                previous = current;
+                current = current.next.?;
+            }
+            if (previous == null) {
+                self.head = current.next;
+            } else {
+                previous.?.next = current.next;
+            }
+            const value = current.value;
+            self.allocator.destroy(current);
+            self.numberOfElements -= 1;
+            return value;
+        }
+
         pub fn get(self: @This(), position: usize) !T {
             if (self.head == null) {
+                return error.isEmpty;
+            }
+
+            if ((position > self.numberOfElements)) {
+                return error.isOutOfBound;
+            }
+
+            var current = self.head.?;
+            for (0..position) |_| {
+                current = current.next.?;
+            }
+            return current.value;
+        }
+
+        pub fn getAt(self: @This(), position: usize) !T {
+            if (self.isEmpty()) {
                 return error.isEmpty;
             }
 
