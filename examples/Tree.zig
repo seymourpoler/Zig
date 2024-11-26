@@ -23,6 +23,19 @@ pub fn create(comptime T: type) type {
         }
 
         pub fn deinit(self: *@This()) void {
+            if (self.head == null) {
+                return;
+            }
+
+            const currentHead = self.head.?;
+            if (currentHead.left != null) {
+                self.deinit(currentHead);
+                self.allocator.destroy(currentHead);
+            }
+            if (self.head.right) |right| {
+                self.deinit(right);
+                self.allocator.destroy(right);
+            }
             self.allocator.destroy(self.head);
             self.head = null;
             self.numberOfElements = 0;
