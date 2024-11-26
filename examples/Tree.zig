@@ -27,10 +27,10 @@ pub fn create(comptime T: type) type {
                 return;
             }
 
-            const currentHead = self.head.?;
-            if (currentHead.left != null) {
-                self.deinit(currentHead);
-                self.allocator.destroy(currentHead);
+            const currentHead = self.head;
+            if (currentHead.left != null) |left| {
+                self.deinit(left);
+                self.allocator.destroy(left);
             }
             if (self.head.right) |right| {
                 self.deinit(right);
